@@ -1,0 +1,1 @@
+try{var l=localStorage.getItem('baseera-language');document.documentElement.lang=l==='en'?'en':'ar';document.documentElement.dir=l==='en'?'ltr':'rtl';document.documentElement.dataset.theme=localStorage.getItem('baseera-theme')==='dark'?'dark':'light';}catch{}
