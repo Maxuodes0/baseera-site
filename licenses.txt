@@ -1,0 +1,49 @@
+# License and provenance register
+
+Checked 2026-11-07. This register distinguishes code, data and weights; it is not a commercial legal clearance. Baseera source has no open-source license grant in this repository; third-party obligations remain separate.
+
+| Component | Selected version / license | Official evidence and disposition |
+|---|---|---|
+| React / React DOM | 19.3.1 / MIT | https://github.com/facebook/react/blob/main/LICENSE — installed |
+| Cornerstone core, tools, loader, metadata | 5.15.2 / MIT | https://github.com/cornerstonejs/cornerstone3D/blob/main/LICENSE — installed; standard viewer used |
+| Vite | 8.3.6 / MIT | https://github.com/vitejs/vite/blob/main/LICENSE — installed |
+| TypeScript | 5.9.3 / Apache-2.0 | npm package license and bundled notice — build tool |
+| FastAPI | 0.162.2 / MIT | https://github.com/fastapi/fastapi/blob/master/LICENSE — installed |
+| pydicom | 3.0.1 / MIT plus bundled dictionary notices | https://github.com/pydicom/pydicom/blob/main/LICENSE — installed; retain GDCM notices |
+| NumPy | 2.2.5 / BSD-3-Clause with bundled notices | Installed wheel metadata; scientific runtime |
+| SQLite | Python bundled / public domain | https://www.sqlite.org/copyright.html — temporary local metadata store |
+| Orthanc core | Not installed / GPLv3+ | https://orthanc.uclouvain.be/book/faq/licensing.html — separate process boundary planned; no proprietary in-process plugin |
+| Orthanc DICOMweb / viewer plugins | Not installed; review each plugin independently | https://www.orthanc-server.com/static.php?page=web-viewer — web viewer AGPL, not installed |
+| PostgreSQL | Not installed / PostgreSQL License | https://www.postgresql.org/about/licence/ — future metadata service |
+| PyTorch | 2.7.1+cu126 / BSD-style plus CUDA binary notices | https://github.com/pytorch/pytorch/blob/main/LICENSE — native Windows CUDA inference and smoke training executed |
+| nnU-Net v2 | 2.6.4 / Apache-2.0 code | https://github.com/MIC-DKFZ/nnUNet/blob/master/LICENSE — does not establish rights to weights or data |
+| Pretrained weights | Official SPIDER IIS checkpoint 999999 / Apache-2.0 repository | Pinned source and checksum below; research baseline |
+
+## Public DICOM smoke fixture — separate data rights
+
+`pydicom 3.0.1 / MR_small.dcm`, SHA-256 `3f27d1c22f1a66e80d7bb7c911e8610fd0bb70325a76746a7adb1c0ddefcf2bb`.
+
+Source: pydicom's bundled test data, derived from NEMA `MR1_UNC`, downsized to 64×64. The upstream test-data README describes modifications and states the maintainer believes there are no restrictions on this use: https://github.com/pydicom/pydicom/blob/main/src/pydicom/data/test_files/README.txt . This is a permission statement for testing, **not an independently established commercial dataset license**. Do not treat pydicom's MIT code license as proof of original image rights. Use only for local software smoke testing; obtain explicit dataset rights before redistribution or model development. The UI labels it as modified and not a lumbar examination. Synthetic test variants are labeled synthetic and never used as genuine analysis.
+
+## SPIDER
+
+The supplied https://zenodo.org/records/10159224 is v2. Its latest-version link resolves to **v4, record 10159290**, DOI 10.5281/zenodo.10159290. Official metadata confirms **218 studies / 218 patients and 447 sagittal T1/T2 series**, vertebral/disc/canal segmentations, official training/validation assignments in overview.csv, and a hidden challenge test set. Disc narrowing is listed; canal stenosis grading must not be inferred from it.
+
+v4 lists images.zip (3.7 GB, MD5 7a9fa44aac0c72e2937bdef62cff88db), masks.zip (58.2 MB, MD5 49861ff25a0108b3b69d0ce808ae51dc), overview.csv and radiological_gradings.csv. Archives downloaded and checked against official MD5 values; see the integrity report. Plan additional space for extraction, preprocessed caches, checkpoints and experiment logs before training; 114 GiB free is not a guarantee that all experiments fit.
+
+The Grand Challenge data page returned HTTP 403 and the rendered Zenodo license field was empty in the web tool. A direct request to the **official API https://zenodo.org/api/records/10159290** resolved this: `metadata.license.id` is **cc-by-4.0**. Preserve attribution to Jasper Willem van der Graaf and coauthors, the v4 DOI, and https://doi.org/10.1038/s41597-024-03090-w . Native format is MHA. Image archive 3,700,562,886 bytes, expanded 3,707,013,638 bytes; masks archive 58,222,897 bytes, expanded 87,032,277 bytes. Research image files do not validate original DICOM ingestion.
+
+## Dependency evidence
+
+Exact npm transitives are in frontend/package-lock.json; exact Python environment in requirements-lock.txt. Targeted npm overrides for adm-zip 0.6.1, fflate 0.8.3 and uuid 11.1.1 remove registry advisories observed at installation. Browser smoke tests validate the uncompressed path after overrides, not every codec/SEG/ZIP feature. The bundled JPEG XL codec declares Node >=24; a project-local Node 24.22.2 build runtime is installed, without replacing the system Node 22.20.0. Retain installed package LICENSE/NOTICE files when distributing. A complete binary/transitive license audit is still required for commercialization.
+
+
+## Installed analysis baseline and additional data
+
+Official code: https://github.com/DIAGNijmegen/SPIDER-Baseline-IIS at `438049a8a679d04f5446c34676e8372fd7b86ead`, Apache-2.0. Released checkpoint `experiments/SPIDER-Baseline/weights/999999.pkl`, 5,147,588 bytes, SHA-256 `5925c72bde416f41ecbbd39b57d39fd174b973155a87baf4d89f2dd9a1a1e201`. The checkpoint is distributed in that licensed repository; no separate weight restriction was found. Retain upstream license and notices. This is not an independently negotiated commercial weight license. Tiger is pinned to official commit `4c63f6d58ed3f8e7a0cec04b0352949f7b512919`. Exact analysis transitives are in `analysis-requirements-lock.txt`; complete binary/transitive license and security review remains outstanding.
+
+This iterative instance-segmentation baseline was developed for SPIDER. Released configuration refers to Final_dataset/fold1; the exact original patient training membership was not independently reconstructed. Scores on official validation case 101_t2 therefore establish a local baseline check, not an independently unbiased held-out benchmark. Incomplete vertebra labels 101–199 are aggregated with vertebrae; canal=100, discs=200+instance. Relative IDs do not establish L1–L5 identity.
+
+Real acquisition candidate: Sudirman et al., Lumbar Spine MRI Dataset, v2, https://doi.org/10.17632/k57fr854j2.2, Mendeley Data, CC-BY-4.0. Archive MRI_Data.zip is 6,270,535,053 bytes. HTTP range reads retrieved patient 0001 sagittal T1/T2 only: 30 DICOM objects, 7,569,910 uncompressed bytes, approximately 13.9 MB transferred including directory metadata. Provenance and per-file hashes are in datasets/dicom-lumbar-0001/provenance.json. Different FrameOfReferenceUID values on each slice prevent acceptance as a consistent series. No metadata was repaired to disguise that defect; independent-viewer acquisition verification is unresolved.
+
+SPIDER-to-DICOM conversions are explicitly DERIVED/SECONDARY with new UIDs and provenance, preserve physical coordinates and voxel values, and are not original clinical DICOM. Attribute Jasper Willem van der Graaf and coauthors, SPIDER v4 DOI and the Scientific Data paper when using or redistributing derived data. Only public data were used locally; no images were uploaded to external AI services.
