@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/landing-q_LREO9I.js","assets/design-CxtWA4Wh.js","assets/navigation-D2WPT05M.js","assets/design-BwzeFDQ0.css","assets/DNA-CzaTLRfT.js","assets/landing-BmtHT1xp.css"])))=>i.map(i=>d[i]);
+import{n as e}from"./navigation-D2WPT05M.js";import{t}from"./preload-helper-CPFTjPDo.js";var n=e(`/baseera-site/xray-qa-164321d/`,location.search,location.hash);n?location.replace(n):t(()=>import(`./landing-q_LREO9I.js`).then(e=>e.t),__vite__mapDeps([0,1,2,3,4,5]));
